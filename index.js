@@ -27,6 +27,7 @@ async function run() {
     await client.connect();
 
     const userCollection = client.db("taskOrbitDB").collection("userDB")
+    const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
 
     //user data
     app.post('/users', async (req, res) => {
@@ -40,6 +41,12 @@ async function run() {
         const result = await userCollection.insertOne(user)
         res.send(result)
     })
+
+    //get review data
+    app.get('/review', async(req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
+  })
 
 
     // Send a ping to confirm a successful connection

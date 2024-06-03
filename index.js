@@ -30,6 +30,14 @@ async function run() {
     const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
 
     //user data
+    app.get('/users/role/:email', async(req, res) => {
+      const email = req.params.email;
+      const query = {email: email};
+      const user = await userCollection.findOne(query)
+      res.send(user)
+    })
+
+
     app.post('/users', async (req, res) => {
         const user = req.body;
         // check the email is alredy exists or not

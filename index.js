@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000;
 
@@ -28,6 +28,7 @@ async function run() {
 
     const userCollection = client.db("taskOrbitDB").collection("userDB")
     const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
+    const addTaskCollection = client.db("taskOrbitDB").collection("addTaskDB")
 
     //user data
     app.get('/users/role/:email', async(req, res) => {
@@ -54,6 +55,25 @@ async function run() {
         }
         const result = await userCollection.insertOne(user)
         res.send(result)
+    })
+
+    // add task data
+    app.get('/task', async (req, res) => {
+      const taskItem = addTaskCollection.find().sort({ current_time: -1 })
+      const result = await taskItem.toArray();
+      res.send(result)
+    })
+    app.post('/addtask', async (req, res) => {
+      const taskData = req.body;
+      const result  = await addTaskCollection.insertOne(taskData)
+      res.send(result)
+    })
+    app.delete('/delete/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = {_id: new ObjectId(id)}
+      const result = await addTaskCollection.deleteOne(query)
+      res.send(result)
     })
 
     //get review data

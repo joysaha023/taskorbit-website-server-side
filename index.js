@@ -31,19 +31,25 @@ async function run() {
     const addTaskCollection = client.db("taskOrbitDB").collection("addTaskDB")
 
     //user data
+    app.get('/users', async(req, res) => {
+      const workerUser =  userCollection.find({role: 'worker'}).sort({created_at: -1})
+      const result = await workerUser.toArray();
+      res.send(result)
+    })
+
     app.get('/users/role/:email', async(req, res) => {
       const email = req.params.email;
       const query = {email: email};
       const user = await userCollection.findOne(query)
       res.send(user)
     })
+
     app.get('/users/user/:email', async(req, res) => {
       const email = req.params.email;
       const query = {email: email};
       const user = await userCollection.findOne(query)
       res.send(user)
     })
-
 
     app.post('/users', async (req, res) => {
         const user = req.body;

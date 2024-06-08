@@ -76,6 +76,13 @@ async function run() {
       const result = await taskItem.toArray();
       res.send(result)
     })
+    app.get('/jobdetails/:id', async(req, res) => {
+      console.log(req.params);
+      const result = await addTaskCollection.findOne({
+        _id: new ObjectId(req.params.id)
+      });
+      res.send(result);
+    })
     app.post('/addtask', async (req, res) => {
       const taskData = req.body;
       const result  = await addTaskCollection.insertOne(taskData)

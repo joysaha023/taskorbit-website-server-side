@@ -29,6 +29,7 @@ async function run() {
     const userCollection = client.db("taskOrbitDB").collection("userDB")
     const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
     const addTaskCollection = client.db("taskOrbitDB").collection("addTaskDB")
+    const submissionCollection = client.db("taskOrbitDB").collection("submissionDB")
 
     //user data
     app.get('/users', async(req, res) => {
@@ -92,6 +93,11 @@ async function run() {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await addTaskCollection.deleteOne(query)
+      res.send(result)
+    })
+    app.post('/submitDetails', async (req, res) => {
+      const submitData = req.body;
+      const result = await submissionCollection.insertOne(submitData)
       res.send(result)
     })
 

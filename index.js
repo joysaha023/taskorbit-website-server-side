@@ -102,6 +102,13 @@ async function run() {
       const result = await submitItem.toArray();
       res.send(result)
     })
+    app.get('/reviewData/:email', async(req, res) => {
+      const email = req.params.email
+      const  query = {creator_email: email}
+      const submitItem = submissionCollection.find(query).sort({ current_date: -1 })
+      const result = await submitItem.toArray();
+      res.send(result)
+    })
     app.post('/submitDetails', async (req, res) => {
       const submitData = req.body;
       const result = await submissionCollection.insertOne(submitData)

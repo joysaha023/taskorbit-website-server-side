@@ -95,6 +95,8 @@ async function run() {
       const result = await addTaskCollection.deleteOne(query)
       res.send(result)
     })
+
+    //submission collection 
     app.get('/submitData/:email', async(req, res) => {
       const email = req.params.email
       const  query = {worker_email: email}
@@ -109,11 +111,29 @@ async function run() {
       const result = await submitItem.toArray();
       res.send(result)
     })
+    app.get('/approveData/:email', async(req, res) => {
+      const email = req.params.email
+      const  query = {worker_email: email, status: 'Approved'}
+      const approveItem = submissionCollection.find(query)
+      const result = await approveItem.toArray();
+      res.send(result)
+    })
     app.post('/submitDetails', async (req, res) => {
       const submitData = req.body;
       const result = await submissionCollection.insertOne(submitData)
       res.send(result)
     })
+    app.patch('/updateStatus/:id', async (req, res) => {
+      const id  = req.params.id
+      const status = req.body
+      const query = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set: status,
+      }
+      const result = await submissionCollection.updateOne(query, updateDoc)
+      res.send(result)
+    })
+
 
     //get review data
     app.get('/review', async(req, res) => {

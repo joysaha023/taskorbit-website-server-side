@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
@@ -30,6 +31,14 @@ async function run() {
     const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
     const addTaskCollection = client.db("taskOrbitDB").collection("addTaskDB")
     const submissionCollection = client.db("taskOrbitDB").collection("submissionDB")
+
+
+    // jwt implement api
+    app.post('/jwt', async(req, res) => {
+      const user = req.body
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET_KEY, {expiresIn: '365d'})
+      res.send({token})
+    })
 
     //user data
     app.get('/users', async(req, res) => {

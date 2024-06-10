@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const userCollection = client.db("taskOrbitDB").collection("userDB")
     const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
@@ -40,6 +40,11 @@ async function run() {
       res.send({token})
     })
 
+    //middlewares
+    const verifyToken = (req, res, next) => {
+      console.log('inside verify token', req.headers);
+      next();
+    }
     //user data
     app.get('/users', async(req, res) => {
       const workerUser =  userCollection.find({role: 'worker'}).sort({created_at: -1})
@@ -176,8 +181,8 @@ async function run() {
 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();

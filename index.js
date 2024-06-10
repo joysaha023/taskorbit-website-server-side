@@ -31,6 +31,7 @@ async function run() {
     const reviewCollection = client.db("taskOrbitDB").collection("reviewDB")
     const addTaskCollection = client.db("taskOrbitDB").collection("addTaskDB")
     const submissionCollection = client.db("taskOrbitDB").collection("submissionDB")
+    const topEarnerCollection = client.db("taskOrbitDB").collection("topEarners")
 
 
     // jwt implement api
@@ -92,6 +93,11 @@ async function run() {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await userCollection.deleteOne(query)
+      res.send(result)
+    })
+
+    app.get('/topEarners', async (req, res) => {
+      const result = await topEarnerCollection.find().toArray()
       res.send(result)
     })
 
